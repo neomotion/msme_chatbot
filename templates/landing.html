@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <div class="landing-container">
+        <h1>Welcome to MSME Chatbot</h1>
+        <p>Limited free interactions available. Please log in to start chatting!</p>
+        <a href="{{ url_for('login') }}">
+            <button>Login</button>
+        </a>
+    </div>
+</body>
+</html>

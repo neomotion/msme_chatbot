@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <div class="upgrade-container">
+        <h3>Upgrade Your Plan</h3>
+        <div class="plan-cards">
+            {% for plan_key, plan in plans.items() %}
+                <div class="plan-card {% if plan_key == user.plan %}selected{% endif %}">
+                    <h4>{{ plan.name }}</h4>
+                    <p>{{ plan.message_limit }} messages/month</p>
+                    <p>Price: {{ plan.price }}</p>
+                    <form method="POST">
+                        <button type="submit" name="plan" value="{{ plan_key }}">Choose {{ plan.name }}</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+
+</html>

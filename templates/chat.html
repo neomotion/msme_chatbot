@@ -1,0 +1,180 @@
+<!-- chat.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with MSME Bot</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            padding: 20px;
+        }
+
+        .chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .logout-button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #ff4d4d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .logout-button:hover {
+            background-color: #ff1a1a;
+        }
+
+        .chat-history {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .chat-entry {
+            margin-bottom: 15px;
+        }
+
+        .chat-entry p {
+            margin: 5px 0;
+        }
+
+        .chat-entry strong {
+            color: #007bff;
+        }
+
+        .chat-entry small {
+            color: #777;
+        }
+
+        .chat-form textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #333;
+            resize: none;
+        }
+
+        .chat-form button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .chat-form button:hover {
+            background-color: #0056b3;
+        }
+
+        .plan-reminder {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #ffcc00;
+            border-radius: 5px;
+            color: white;
+            text-align: center;
+        }
+
+        .upgrade-button {
+            background-color: #007bff;
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .upgrade-button:hover {
+            background-color: #0056b3;
+        }
+
+        .alert-warning {
+            background-color: #ffcc00;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            color: #333;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <h1>Chat with MSME Bot</h1>
+
+        <!-- Logout Button -->
+        <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+
+        <!-- Free Message Limit Alert -->
+        {% if user.plan == "free" and user.used_messages >= 5 %}
+            <div class="alert-warning">
+                You've used all your free messages. Please upgrade your plan to continue chatting.
+            </div>
+        {% endif %}
+
+        <!-- Chat History -->
+        <div class="chat-history">
+            {% for chat in chat_history %}
+                <div class="chat-entry">
+                    <p><strong>Q:</strong> {{ chat.question }}</p>
+                    <p><strong>A:</strong> {{ chat.answer }}</p>
+                    <p><small>Timestamp: {{ chat.timestamp }}</small></p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Chat Form -->
+        <form method="POST" class="chat-form">
+            <textarea name="message" placeholder="Ask a question..." required {% if user.plan == "free" and user.used_messages >= 5 %}disabled{% endif %}></textarea>
+            <button type="submit" {% if user.plan == "free" and user.used_messages >= 5 %}disabled{% endif %}>Send</button>
+        </form>
+
+        <!-- Plan Reminder if user is on Free Plan -->
+        {% if user.plan == "free" %}
+            <div class="plan-reminder">
+                <p>You are on the Free plan. You can only send 5 messages. Upgrade your plan for more messages!</p>
+                <a href="{{ url_for('upgrade') }}" class="upgrade-button">Upgrade Plan</a>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
